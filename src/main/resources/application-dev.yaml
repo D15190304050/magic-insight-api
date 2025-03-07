@@ -1,0 +1,43 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/magic_insight?useUnicode=true&characterEncoding=utf8
+        hikari:
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            username: DinoStark
+            password: non-feeling
+    data:
+        redis:
+            host: localhost
+            #            port: 6379
+            port: 10079
+    kafka:
+        bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+        consumer:
+            bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+    elasticsearch:
+        uris: http://localhost:9200 # URI of Elasticsearch.
+
+dataworks:
+    easy-minio:
+        #        endpoint: http://localhost:9000
+        endpoint: http://localhost:10074
+        access-key: minioadmin
+        secret-key: minioadmin
+        bucket-name-images: stella-images
+        bucket-name-videos: stella-videos
+        bucket-name-video-subtitles: stella-video-subtitles
+        bucket-name-summaries: stella-video-summaries
+
+images:
+    avatar-url-prefix: http://localhost:${server.port}/avatar/
+    video-cover-prefix: http://localhost:${server.port}/video/cover/
+
+stella-search:
+    jwt-secret: q4~@x2uC$f@M2x*^e5&DB^L!3~)6@+
+
+logging:
+    level:
+        stark.stellasearch.dao: DEBUG
+
+doubao:
+    model-endpoint: ep-20240917215653-hmx7x
