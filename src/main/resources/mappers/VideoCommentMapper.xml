@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stark.reshaper.magicinsight.dao.VideoCommentMapper">
+    <resultMap id="VideoCommentResultMap" type="stark.reshaper.magicinsight.domain.entities.UserVideoComment">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="content" column="content"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="creatorId" column="creator_id"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="modifierId" column="modifier_id"/>
+        <result property="modificationTime" column="modification_time"/>
+    </resultMap>
+
+    <resultMap id="VideoCommentInfoResultMap" type="stark.reshaper.magicinsight.domain.dtos.results.VideoCommentInfo">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="content" column="content"/>
+        <result property="creationTime" column="creation_time"/>
+    </resultMap>
+
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user_video_comment`
+        (`user_id`, `video_id`, `content`, `parent_id`, `creator_id`, `creation_time`, `modifier_id`,
+         `modification_time`)
+        VALUES (#{userId}, #{videoId}, #{content}, #{parentId}, #{creatorId}, #{creationTime}, #{modifierId},
+                #{modificationTime})
+    </insert>
+
+    <delete id="deleteCommentById">
+        DELETE
+        FROM `user_video_comment`
+        WHERE `id` = #{id}
+    </delete>
+
+    <select id="countByParentId" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `user_video_comment`
+        WHERE `id` = #{parentId}
+    </select>
+
+    <select id="getVideoCommentsByVideoId" resultMap="VideoCommentInfoResultMap" >
+        SELECT uvc.`id`,
+               uvc.`user_id`,
+               abi.`nickname`,
+               abi.`avatar_url`,
+               uvc.`content`,
+               uvc.`creation_time`
+        FROM `user_video_comment` uvc
+                 INNER JOIN `account_base_info` abi
+                            ON uvc.`user_id` = abi.`id`
+        WHERE uvc.`video_id` = #{videoId}
+        ORDER BY `creation_time`
+        LIMIT #{pageCapacity} OFFSET #{offset}
+    </select>
+
+    <select id="getCommentById" resultMap="VideoCommentResultMap">
+        SELECT `id`, `user_id`, `video_id`, `content`, `parent_id`, `creator_id`, `creation_time`, `modifier_id`,
+        `modification_time`
+        FROM `user_video_comment`
+        WHERE `id` = #{id}
+    </select>
+
+    <select id="countCommentsByVideoId" resultType="long">
+        SELECT COUNT(*)
+        FROM `user_video_comment`
+        WHERE `video_id` = #{videoId}
+    </select>
+</mapper>
