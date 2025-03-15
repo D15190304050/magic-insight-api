@@ -37,7 +37,7 @@ stella-search:
 
 logging:
     level:
-        stark.stellasearch.dao: DEBUG
+        stark.reshaper.magicinsight.dao: DEBUG
 
 doubao:
     model-endpoint: ep-20240917215653-hmx7x

@@ -24,5 +24,32 @@ public class SchemaSnapshot extends SchemaSnapshotBase {
             builder.primaryKey().columnName("id");
             builder.engine("InnoDB");
         });
+        schemaBuilder.table("user_video_comment", builder -> {
+            builder.column().name("user_id").type("BIGINT").nullable(false).unique(false);
+            builder.column().name("video_id").type("BIGINT").nullable(false).unique(false);
+            builder.column().name("content").type("VARCHAR(200)").nullable(true).unique(false);
+            builder.column().name("parent_id").type("BIGINT").nullable(false).unique(false);
+            builder.column().name("id").type("BIGINT").nullable(false).unique(false).autoIncrement(1);
+            builder.column().name("creator_id").type("BIGINT").nullable(false).unique(false);
+            builder.column().name("creation_time").type("DATETIME").nullable(true).unique(false);
+            builder.column().name("modifier_id").type("BIGINT").nullable(false).unique(false);
+            builder.column().name("modification_time").type("DATETIME").nullable(true).unique(false);
+            builder.primaryKey().columnName("id");
+            builder.engine("InnoDB");
+        });
+        schemaBuilder.table("user_video_info", builder -> {
+            builder.column().name("name_in_oss").type("VARCHAR(200)").nullable(true).unique(false);
+            builder.column().name("title").type("VARCHAR(200)").nullable(true).unique(false);
+            builder.column().name("cover_url").type("VARCHAR(500)").nullable(true).unique(false);
+            builder.column().name("introduction").type("VARCHAR(200)").nullable(true).unique(false);
+            builder.column().name("summary_file_path").type("VARCHAR(200)").nullable(true).unique(false);
+            builder.column().name("id").type("BIGINT").nullable(false).unique(false).autoIncrement(1);
+            builder.column().name("creator_id").type("BIGINT").nullable(false).unique(false);
+            builder.column().name("creation_time").type("DATETIME").nullable(true).unique(false);
+            builder.column().name("modifier_id").type("BIGINT").nullable(false).unique(false);
+            builder.column().name("modification_time").type("DATETIME").nullable(true).unique(false);
+            builder.primaryKey().columnName("id");
+            builder.engine("InnoDB");
+        });
     }
 }
