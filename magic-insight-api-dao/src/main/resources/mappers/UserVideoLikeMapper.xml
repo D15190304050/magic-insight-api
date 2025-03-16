@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stark.magicinsight.dao.UserVideoLikeMapper">
+    <resultMap id="UserVideoLikeResultMap" type="stark.magicinsight.domain.UserVideoLike">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="likeType" column="like_type"/>
+        <result property="creatorId" column="creator_id"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="modifierId" column="modifier_id"/>
+        <result property="modificationTime" column="modification_time"/>
+    </resultMap>
+
+    <insert id="insertLike">
+        INSERT INTO `user_video_like`
+        (
+            `user_id`,
+            `video_id`,
+            `like_type`,
+            `creator_id`,
+            `creation_time`,
+            `modifier_id`,
+            `modification_time`
+        )
+        VALUES
+        (
+            #{userId},
+            #{videoId},
+            #{likeType},
+            #{creatorId},
+            #{creationTime},
+            #{modifierId},
+            #{modificationTime}
+        )
+    </insert>
+
+    <delete id="deleteLike">
+        DELETE FROM `user_video_like`
+        WHERE `user_id` = #{userId}
+        AND `video_id` = #{videoId}
+    </delete>
+
+    <select id="countUserVideoLike" resultType="long" >
+        SELECT COUNT(*)
+        FROM `user_video_like`
+        WHERE `user_id` = #{userId}
+        AND `video_id` = #{videoId}
+    </select>
+</mapper>
