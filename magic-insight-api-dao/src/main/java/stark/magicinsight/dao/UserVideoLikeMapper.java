@@ -1,7 +1,7 @@
 package stark.magicinsight.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import stark.magicinsight.domain.UserVideoLike;
+import stark.magicinsight.domain.entities.UserVideoLike;
 
 @Mapper
 public interface UserVideoLikeMapper

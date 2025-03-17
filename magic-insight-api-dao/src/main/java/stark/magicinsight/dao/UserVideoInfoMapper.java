@@ -2,7 +2,7 @@ package stark.magicinsight.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import stark.magicinsight.domain.UserVideoInfo;
+import stark.magicinsight.domain.entities.UserVideoInfo;
 import stark.magicinsight.dto.params.SearchVideoQueryParam;
 import stark.magicinsight.dto.params.GetVideoInfosByUserIdQueryParam;
 import stark.magicinsight.dto.params.GetVideoPlayInfoInPlaylistQueryParam;

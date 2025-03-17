@@ -8,7 +8,7 @@ import stark.dataworks.boot.web.PaginatedData;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.magicinsight.dao.UserVideoInfoMapper;
 import stark.magicinsight.dao.VideoCommentMapper;
-import stark.magicinsight.domain.UserVideoComment;
+import stark.magicinsight.domain.entities.UserVideoComment;
 import stark.magicinsight.dto.params.AddCommentsRequest;
 import stark.magicinsight.dto.params.DeleteCommentsRequest;
 import stark.magicinsight.dto.params.GetCommentsByVideoIdQueryParam;

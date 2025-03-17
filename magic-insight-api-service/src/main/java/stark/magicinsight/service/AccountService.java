@@ -14,7 +14,7 @@ import stark.dataworks.boot.autoconfig.web.LogArgumentsAndResponse;
 import stark.dataworks.boot.web.CommonErrorResponses;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.magicinsight.dao.AccountBaseInfoMapper;
-import stark.magicinsight.domain.AccountBaseInfo;
+import stark.magicinsight.domain.entities.AccountBaseInfo;
 import stark.magicinsight.dto.params.RegistrationRequest;
 import stark.magicinsight.dto.results.LoginState;
 import stark.magicinsight.service.constants.Genders;

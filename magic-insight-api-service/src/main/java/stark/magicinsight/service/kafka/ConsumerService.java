@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.autoconfig.minio.EasyMinio;
 import stark.magicinsight.dao.UserVideoInfoMapper;
-import stark.magicinsight.domain.UserVideoInfo;
+import stark.magicinsight.domain.entities.UserVideoInfo;
 import stark.magicinsight.domain.entities.es.VideoSummaryInfo;
 import stark.magicinsight.dto.params.VideoSummaryEndMessage;
 import stark.magicinsight.dto.results.TranscriptSummary;

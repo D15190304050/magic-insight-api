@@ -1,7 +1,7 @@
 package stark.magicinsight.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import stark.magicinsight.domain.UserVideoComment;
+import stark.magicinsight.domain.entities.UserVideoComment;
 import stark.magicinsight.dto.params.GetCommentsByVideoIdQueryParam;
 import stark.magicinsight.dto.results.VideoCommentInfo;
 

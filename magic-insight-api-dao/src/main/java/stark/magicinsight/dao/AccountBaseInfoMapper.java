@@ -2,7 +2,7 @@ package stark.magicinsight.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import stark.magicinsight.domain.AccountBaseInfo;
+import stark.magicinsight.domain.entities.AccountBaseInfo;
 
 import java.util.List;
 

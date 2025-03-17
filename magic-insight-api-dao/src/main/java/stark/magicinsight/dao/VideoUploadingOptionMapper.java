@@ -1,9 +1,9 @@
 package stark.magicinsight.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import stark.magicinsight.domain.VideoCreationType;
-import stark.magicinsight.domain.VideoLabel;
-import stark.magicinsight.domain.VideoSection;
+import stark.magicinsight.domain.entities.VideoCreationType;
+import stark.magicinsight.domain.entities.VideoLabel;
+import stark.magicinsight.domain.entities.VideoSection;
 
 import java.util.List;
 

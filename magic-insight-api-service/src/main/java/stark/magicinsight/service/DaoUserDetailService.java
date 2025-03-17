@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import stark.magicinsight.dao.AccountBaseInfoMapper;
-import stark.magicinsight.domain.AccountBaseInfo;
+import stark.magicinsight.domain.entities.AccountBaseInfo;
 import stark.magicinsight.service.dto.User;
 
 @Slf4j

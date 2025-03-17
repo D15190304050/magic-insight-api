@@ -2,7 +2,7 @@ package stark.magicinsight.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import stark.magicinsight.domain.UserVideoFavorites;
+import stark.magicinsight.domain.entities.UserVideoFavorites;
 import stark.magicinsight.dto.params.GetUserFavoritesByPlaylistIdParam;
 
 import java.util.List;

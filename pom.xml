@@ -125,8 +125,8 @@
                 <artifactId>fluent-schema-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
-                    <schemaPackage>stark.reshaper.magicinsight.domain.schemas</schemaPackage>
-                    <entityPackage>stark.reshaper.magicinsight.domain.entities</entityPackage>
+                    <schemaPackage>stark.magicinsight.domain.entities</schemaPackage>
+                    <entityPackage>stark.magicinsight.domain.schemas</entityPackage>
                     <jdbcUrl>jdbc:mysql://localhost:3306/magic_insight?useUnicode=true&amp;characterEncoding=utf8</jdbcUrl>
                     <username>DinoStark</username>
                     <password>non-feeling</password>

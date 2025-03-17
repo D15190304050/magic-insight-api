@@ -2,7 +2,7 @@ package stark.magicinsight.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import stark.magicinsight.domain.UserVideoPlaylist;
+import stark.magicinsight.domain.entities.UserVideoPlaylist;
 import stark.magicinsight.dto.params.ModifyPlaylistInfoCommandParam;
 import stark.magicinsight.dto.results.PlaylistInfo;
 import stark.magicinsight.dto.results.PlaylistWithVideoCheck;

@@ -1,13 +1,15 @@
-package stark.magicinsight.domain;
+package stark.magicinsight.domain.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import stark.coderaider.fluentschema.commons.annotations.NotMapped;
 
 /**
  * Play records of videos.
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@NotMapped
 public class VideoPlayRecord extends DomainBase
 {
     /**

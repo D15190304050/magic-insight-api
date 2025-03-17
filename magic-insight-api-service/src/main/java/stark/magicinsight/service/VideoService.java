@@ -17,9 +17,9 @@ import stark.dataworks.boot.autoconfig.web.LogArgumentsAndResponse;
 import stark.dataworks.boot.web.PaginatedData;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.magicinsight.dao.*;
-import stark.magicinsight.domain.UserVideoLike;
-import stark.magicinsight.domain.UserVideoInfo;
-import stark.magicinsight.domain.VideoPlayRecord;
+import stark.magicinsight.domain.entities.UserVideoLike;
+import stark.magicinsight.domain.entities.UserVideoInfo;
+import stark.magicinsight.domain.entities.VideoPlayRecord;
 import stark.magicinsight.dto.params.*;
 import stark.magicinsight.dto.results.TopicSummaryVideoStartMessage;
 import stark.magicinsight.dto.results.TranscriptSummary;
@@ -354,7 +354,6 @@ public class VideoService
 
         userVideoInfo.setTitle(request.getTitle());
         userVideoInfo.setCoverUrl(request.getCoverUrl());
-        userVideoInfo.setCreationTypeId(request.getVideoCreationType());
         userVideoInfo.setSectionId(request.getSection());
         userVideoInfo.setLabelIds(labelArrayText);
         userVideoInfo.setIntroduction(request.getIntroduction());
@@ -497,7 +496,6 @@ public class VideoService
         formData.setCoverUrl(userVideoInfo.getCoverUrl());
         formData.setIntroduction(userVideoInfo.getIntroduction());
         formData.setSection(userVideoInfo.getSectionId());
-        formData.setVideoCreationType(userVideoInfo.getCreationTypeId());
         formData.setLabels(labels);
 
         return formData;

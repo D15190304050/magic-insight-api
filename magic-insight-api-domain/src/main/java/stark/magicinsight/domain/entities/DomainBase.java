@@ -1,15 +1,22 @@
-package stark.magicinsight.domain;
+package stark.magicinsight.domain.entities;
 
 import lombok.Data;
+import stark.coderaider.fluentschema.commons.annotations.AutoIncrement;
+import stark.coderaider.fluentschema.commons.annotations.Column;
+import stark.coderaider.fluentschema.commons.annotations.NotMapped;
+import stark.coderaider.fluentschema.commons.annotations.PrimaryKey;
 
 import java.util.Date;
 
 @Data
+@NotMapped
 public abstract class DomainBase
 {
     /**
      * ID of the record.
      */
+    @PrimaryKey
+    @AutoIncrement
     private long id;
 
     /**
@@ -20,6 +27,7 @@ public abstract class DomainBase
     /**
      * Creation time of the record.
      */
+    @Column(defaultValue = "NOW()")
     private Date creationTime;
 
     /**
@@ -30,5 +38,6 @@ public abstract class DomainBase
     /**
      * Last modification time of the record.
      */
+    @Column(defaultValue = "NOW()", onUpdate = "NOW()")
     private Date modificationTime;
 }
