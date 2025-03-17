@@ -15,8 +15,6 @@ import java.util.Date;
 @Table(namingConvention = NamingConvention.LOWER_CASE_WITH_UNDERSCORE)
 public class AccountBaseInfo extends DomainBase
 {
-    private long id;
-
     @Column(type = "VARCHAR(20)", nullable = false)
     private String phoneNumber;
 
