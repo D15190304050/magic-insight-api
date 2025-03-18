@@ -5,7 +5,7 @@ import stark.coderaider.fluentschema.commons.schemas.KeyMetadata;
 import stark.coderaider.fluentschema.commons.schemas.SchemaMigrationBase;
 import java.util.List;
 
-public class SchemaMigration20250317235538 extends SchemaMigrationBase {
+public class SchemaMigration20250318210210 extends SchemaMigrationBase {
     @Override
     public void forward() {
         setInitialized(false);

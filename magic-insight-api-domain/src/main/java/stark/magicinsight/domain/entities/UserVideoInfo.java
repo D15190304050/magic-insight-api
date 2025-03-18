@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import stark.coderaider.fluentschema.commons.NamingConvention;
 import stark.coderaider.fluentschema.commons.annotations.Column;
 import stark.coderaider.fluentschema.commons.annotations.Table;
-import stark.magicinsight.enums.VideoCreationType;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
