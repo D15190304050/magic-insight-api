@@ -13,7 +13,6 @@ import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.autoconfig.minio.EasyMinio;
 import stark.magicinsight.dao.UserVideoInfoMapper;
 import stark.magicinsight.domain.entities.UserVideoInfo;
-import stark.magicinsight.domain.entities.es.VideoSummaryInfo;
 import stark.magicinsight.dto.params.VideoSummaryEndMessage;
 import stark.magicinsight.dto.results.TranscriptSummary;
 import stark.magicinsight.service.doubao.DoubaoSummarizer;
@@ -100,18 +99,6 @@ public class ConsumerService
     {
         String summaryFileName = saveSummaryToMinio(videoId, transcriptSummary);
         saveSummaryFileNameToDb(videoId, summaryFileName);
-    }
-
-    private VideoSummaryInfo toVideoSummaryInfo(long videoId, TranscriptSummary transcriptSummary)
-    {
-        UserVideoInfo userVideoInfo = userVideoInfoMapper.getVideoBaseInfoById(videoId);
-        VideoSummaryInfo videoSummaryInfo = new VideoSummaryInfo();
-        videoSummaryInfo.setVideoId(videoId);
-        videoSummaryInfo.setTitle(userVideoInfo.getTitle());
-        videoSummaryInfo.setIntroduction(userVideoInfo.getIntroduction());
-        videoSummaryInfo.setSummary(transcriptSummary.getSummary());
-        videoSummaryInfo.setLabels(transcriptSummary.getLabels());
-        return videoSummaryInfo;
     }
 
     private String saveSummaryToMinio(long videoId, TranscriptSummary transcriptSummary) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
