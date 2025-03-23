@@ -4,15 +4,12 @@ import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import stark.dataworks.boot.web.PaginatedData;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.magicinsight.dto.params.*;
 import stark.magicinsight.dto.results.TranscriptSummary;
 import stark.magicinsight.dto.results.VideoPlayInfo;
-import stark.magicinsight.dto.results.VideoUploadingOption;
 import stark.magicinsight.service.ImageService;
 import stark.magicinsight.service.VideoService;
-import stark.magicinsight.service.VideoUploadingOptionHolder;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,9 +28,6 @@ public class VideoController
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private VideoUploadingOptionHolder videoUploadingOptionHolder;
-
     @GetMapping("/generate-task")
     public ServiceResponse<String> generateNewVideoUploadingTask(@ModelAttribute NewVideoUploadingTaskRequest request)
     {
@@ -51,12 +45,6 @@ public class VideoController
     public ServiceResponse<Long> composeVideoChunks(@RequestBody ComposeVideoChunksRequest request) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, ExecutionException, InterruptedException
     {
         return videoService.composeVideoChunks(request);
-    }
-
-    @GetMapping("/uploading-options")
-    public ServiceResponse<VideoUploadingOption> getVideoUploadingOptions()
-    {
-        return videoUploadingOptionHolder.getVideoUploadingOptions();
     }
 
     @PostMapping("/upload-cover")
