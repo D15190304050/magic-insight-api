@@ -297,21 +297,14 @@ public class VideoService
         long videoId = request.getVideoId();
         OutValue<UserVideoInfo> userVideoInfoOutValue = new OutValue<>();
 
-        String errorMessage = validateVideoLabels(request.getLabels());
+        String errorMessage = validateVideoInfoForInitialization(videoId, userVideoInfoOutValue);
         if (errorMessage != null)
             return ServiceResponse.buildErrorResponse(-2, errorMessage);
 
-        errorMessage = validateVideoInfoForInitialization(videoId, userVideoInfoOutValue);
-        if (errorMessage != null)
-            return ServiceResponse.buildErrorResponse(-2, errorMessage);
-
-        ServiceResponse<Boolean> updatedVideoInfoResponse = updateVideoInfoResponse(request, userVideoInfoOutValue.getValue());
+        UserVideoInfo userVideoInfo = userVideoInfoOutValue.getValue();
+        ServiceResponse<Boolean> updatedVideoInfoResponse = updateVideoInfoResponse(request, userVideoInfo);
         if (!updatedVideoInfoResponse.isSuccess())
             return updatedVideoInfoResponse;
-
-        UserVideoInfo userVideoInfo = userVideoInfoMapper.getVideoBaseInfoById(videoId);
-        if (userVideoInfo == null)
-            return ServiceResponse.buildErrorResponse(-2, "Invalid video ID: " + videoId);
 
         sendSummaryStartMessage(videoId, userVideoInfo.getNameInOss());
 
@@ -335,14 +328,8 @@ public class VideoService
 
     private void updateVideoInfo(VideoInfoFormData request, UserVideoInfo userVideoInfo)
     {
-        List<Long> labels = request.getLabels();
-        labels.sort(Long::compareTo);
-        String labelArrayText = JsonSerializer.serialize(labels);
-
         userVideoInfo.setTitle(request.getTitle());
         userVideoInfo.setCoverUrl(request.getCoverUrl());
-        userVideoInfo.setSectionId(request.getSection());
-        userVideoInfo.setLabelIds(labelArrayText);
         userVideoInfo.setIntroduction(request.getIntroduction());
 
         userVideoInfoMapper.updateVideoInfoById(userVideoInfo);
@@ -447,12 +434,8 @@ public class VideoService
 
     public ServiceResponse<Boolean> updateVideoInfo(@Valid VideoInfoFormData request)
     {
-        String errorMessage = validateVideoLabels(request.getLabels());
-        if (errorMessage != null)
-            return ServiceResponse.buildErrorResponse(-7, errorMessage);
-
         OutValue<UserVideoInfo> userVideoInfoOutValue = new OutValue<>();
-        errorMessage = validateVideoInfoForUpdate(request.getVideoId(), userVideoInfoOutValue);
+        String errorMessage = validateVideoInfoForUpdate(request.getVideoId(), userVideoInfoOutValue);
         if (errorMessage != null)
             return ServiceResponse.buildErrorResponse(-6, errorMessage);
 
@@ -472,18 +455,12 @@ public class VideoService
 
     private static VideoInfoFormData convertToVideoInfoFormData(UserVideoInfo userVideoInfo)
     {
-        String labelIds = userVideoInfo.getLabelIds();
-        List<Long> labels = JsonSerializer.deserializeList(labelIds, Long.class);
-        labels.sort(Long::compareTo);
-
         VideoInfoFormData formData = new VideoInfoFormData();
 
         formData.setVideoId(userVideoInfo.getId());
         formData.setTitle(userVideoInfo.getTitle());
         formData.setCoverUrl(userVideoInfo.getCoverUrl());
         formData.setIntroduction(userVideoInfo.getIntroduction());
-        formData.setSection(userVideoInfo.getSectionId());
-        formData.setLabels(labels);
 
         return formData;
     }

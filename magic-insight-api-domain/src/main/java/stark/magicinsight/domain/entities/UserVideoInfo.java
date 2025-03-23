@@ -31,17 +31,6 @@ public class UserVideoInfo extends DomainBase
     private String coverUrl;
 
     /**
-     * ID of the section that the video belongs to.
-     */
-    private long sectionId;
-
-    /**
-     * Labels of the video, separated by ",", e.g., "Game,Challenge".
-     */
-    @Column(type = "VARCHAR(300)")
-    private String labelIds;
-
-    /**
      * Introduction to the video.
      */
     @Column(type = "VARCHAR(1000)")
@@ -51,5 +40,5 @@ public class UserVideoInfo extends DomainBase
      * Path of the summary file of the video.
      */
     @Column(type = "VARCHAR(255)")
-    private String summaryFilePath;
+    private String summaryFileName;
 }
