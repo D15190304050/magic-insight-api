@@ -6,7 +6,6 @@
         <result property="nameInOss" column="name_in_oss"/>
         <result property="title" column="title"/>
         <result property="coverUrl" column="cover_url"/>
-        <result property="creationTypeId" column="creation_type_id"/>
         <result property="sectionId" column="section_id"/>
         <result property="labelIds" column="label_ids"/>
         <result property="introduction" column="introduction"/>
@@ -84,21 +83,10 @@
                uvi.`introduction`               AS `introduction`,
                uvi.`creation_time`              AS `creation_time`,
                uvi.`modification_time`          AS `modification_time`,
-               COALESCE(vpr.play_count, 0)      AS `play_count`,
                COALESCE(uvf.favorites_count, 0) AS `favorites_count`,
                COALESCE(uvl.like_count, 0)      AS `like_count`,
                COALESCE(uvc.comment_count, 0)   AS `comment_count`
         FROM `user_video_info` uvi
-        LEFT JOIN
-        (
-            SELECT
-                `video_id`,
-                COUNT(*) AS play_count
-            FROM `video_play_record`
-            WHERE `video_id` IN (SELECT `id` FROM `user_video_info` WHERE `creator_id` = #{userId})
-            GROUP BY `video_id`
-        ) vpr
-        ON uvi.`id` = vpr.`video_id`
         LEFT JOIN
         (
             SELECT

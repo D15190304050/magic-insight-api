@@ -107,24 +107,6 @@ public class VideoController
         return videoService.getVideoPlayInfoById(videoId);
     }
 
-    @PostMapping("/like")
-    public ServiceResponse<Boolean> likeVideo(@RequestBody LikeVideoRequest request)
-    {
-        return videoService.likeVideo(request);
-    }
-
-    @PostMapping("/cancel-like")
-    public ServiceResponse<Boolean> cancelLikeVideo(@RequestBody CancelLikeVideoRequest request)
-    {
-        return videoService.cancelLikeVideo(request);
-    }
-
-    @GetMapping("/in-playlist")
-    public ServiceResponse<PaginatedData<VideoPlayInfo>> getVideoPlayInfoInPlaylist(@ModelAttribute GetVideoPlayInfoInPlaylistRequest request)
-    {
-        return videoService.getVideoPlayInfoInPlaylist(request);
-    }
-
     @GetMapping("/summary")
     public ServiceResponse<TranscriptSummary> getSummaryOfVideo(@RequestParam("videoId") long videoId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {

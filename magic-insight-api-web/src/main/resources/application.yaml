@@ -1,5 +1,5 @@
 server:
-    port: 19332
+    port: 19372
 
 spring:
     profiles:

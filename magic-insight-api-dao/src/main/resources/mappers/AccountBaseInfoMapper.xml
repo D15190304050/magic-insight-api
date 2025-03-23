@@ -13,7 +13,7 @@
         <result column="gender" jdbcType="VARCHAR" property="gender"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="creation_time" jdbcType="TIMESTAMP" property="creationTime"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="modification_time" jdbcType="TIMESTAMP" property="modificationTime"/>
     </resultMap>
 
     <select id="getAccountByUsername" resultMap="BaseResultMap">
@@ -28,7 +28,7 @@
                `gender`,
                `state`,
                `creation_time`,
-               `update_time`
+               `modification_time`
         FROM `account_base_info`
         WHERE `username` = #{username}
     </select>
@@ -49,9 +49,31 @@
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `account_base_info`
-        (`phone_number`, `encrypted_password`, `username`, `nickname`, `avatar_url`, `email`, `phone_number_prefix`, `gender`)
+        (
+            `phone_number`,
+            `encrypted_password`,
+            `username`,
+            `nickname`,
+            `avatar_url`,
+            `email`,
+            `phone_number_prefix`,
+            `gender`,
+            `creator_id`,
+            `modifier_id`
+        )
         VALUES
-        (#{phoneNumber}, #{encryptedPassword}, #{username}, #{nickname}, #{avatarUrl}, #{email}, #{phoneNumberPrefix}, #{gender})
+        (
+            #{phoneNumber},
+            #{encryptedPassword},
+            #{username},
+            #{nickname},
+            #{avatarUrl},
+            #{email},
+            #{phoneNumberPrefix},
+            #{gender},
+            0,
+            0
+        )
     </insert>
 
     <select id="getAccountByUserId" resultMap="BaseResultMap">
@@ -66,7 +88,7 @@
                `gender`,
                `state`,
                `creation_time`,
-               `update_time`
+               `modification_time`
         FROM `account_base_info`
         WHERE `id` = #{userId}
     </select>

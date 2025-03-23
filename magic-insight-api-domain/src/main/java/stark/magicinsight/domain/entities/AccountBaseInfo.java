@@ -39,5 +39,6 @@ public class AccountBaseInfo extends DomainBase
     @Column(type = "VARCHAR(10)", nullable = false)
     private String gender;
 
+    @Column(defaultValue = "0", nullable = false)
     private int state;
 }

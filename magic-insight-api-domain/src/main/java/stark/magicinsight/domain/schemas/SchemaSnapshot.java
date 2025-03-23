@@ -15,7 +15,7 @@ public class SchemaSnapshot extends SchemaSnapshotBase {
             builder.column().name("email").type("VARCHAR(200)").nullable(false).unique(false);
             builder.column().name("phone_number_prefix").type("VARCHAR(200)").nullable(false).unique(false);
             builder.column().name("gender").type("VARCHAR(10)").nullable(false).unique(false);
-            builder.column().name("state").type("INT").nullable(false).unique(false);
+            builder.column().name("state").type("INT").nullable(false).unique(false).defaultValue("0");
             builder.column().name("id").type("BIGINT").nullable(false).unique(false).autoIncrement(1);
             builder.column().name("creator_id").type("BIGINT").nullable(false).unique(false);
             builder.column().name("creation_time").type("DATETIME").nullable(true).unique(false).defaultValue("NOW()");
