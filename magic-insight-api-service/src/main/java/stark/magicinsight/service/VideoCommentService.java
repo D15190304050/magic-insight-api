@@ -30,6 +30,9 @@ public class VideoCommentService
     @Autowired
     private VideoCommentMapper videoCommentMapper;
 
+    /*
+    what does parent id mean?
+     */
     public ServiceResponse<Long> addComment(@Valid AddCommentsRequest request)
     {
         // 1. Validate if video id exists.

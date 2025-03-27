@@ -81,6 +81,9 @@ public class AccountService
         return ServiceResponse.buildSuccessResponse(true);
     }
 
+    /*
+    使用 Locale.ROOT 可以确保转换结果不受用户本地语言环境的影响
+     */
     private static AccountBaseInfo getAccountBaseInfo(RegistrationRequest registrationRequest, String encodedPassword)
     {
         AccountBaseInfo accountBaseInfo = new AccountBaseInfo();

@@ -47,6 +47,9 @@ public class VideoController
         return videoService.uploadVideoChunk(request);
     }
 
+    /*
+    what do chunks mean?
+     */
     @PostMapping("/compose-chunks")
     public ServiceResponse<Long> composeVideoChunks(@RequestBody ComposeVideoChunksRequest request) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, ExecutionException, InterruptedException
     {

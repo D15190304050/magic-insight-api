@@ -35,6 +35,7 @@ public class StartupInitializer implements ApplicationContextAware, ApplicationL
     public void onApplicationEvent(WebServerInitializedEvent event)
     {
         String doubaoApiKey = System.getenv(doubaoApiKeyEnvironmentVariableName);
+//        String doubaoApiKey = "api key placeholder";
         doubaoMultiRoundChatSessionFactory.setDoubaoApiKey(doubaoApiKey);
         doubaoMultiRoundChatSessionFactory.setArkService(ArkService.builder().apiKey(doubaoApiKey).build());
 

@@ -30,6 +30,13 @@ public class CaptchaService
     @Autowired
     private RedisQuickOperation redisQuickOperation;
 
+    /*
+    Producer的实现体？
+    response.setContentType方法 设置HTTP响应的内容类型为image/jpeg，表示返回的内容是一个JPEG格式的图片
+    字符串captchaBytes的组成：将输出流中的字节数组转换为Base64编码的字符串，并添加data:image/jpeg;base64,前缀，以便可以直接在HTML中作为图片源使用。
+    redisQuickOperation.set方法 将验证码文本存储到Redis中，键为验证码ID，值为验证码文本，并设置过期时间为5分钟
+     */
+
     public ServiceResponse<CaptchaResponse> generateCaptcha(HttpServletResponse response) throws IOException
     {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);

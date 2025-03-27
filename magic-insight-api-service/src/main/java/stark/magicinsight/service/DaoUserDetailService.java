@@ -18,6 +18,9 @@ public class DaoUserDetailService implements UserDetailsService, UserDetailsPass
     @Autowired
     private AccountBaseInfoMapper accountBaseInfoMapper;
 
+    /*
+    why update twice?
+     */
     @Override
     public UserDetails updatePassword(UserDetails user, String newPassword)
     {

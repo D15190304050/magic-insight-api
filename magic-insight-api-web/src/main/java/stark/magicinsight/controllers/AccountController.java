@@ -24,6 +24,9 @@ public class AccountController
     @Autowired
     private AccountService accountService;
 
+    /*
+    why it's fixed name->test
+     */
     @GetMapping("/login")
     public ServiceResponse<LoginState> login()
     {

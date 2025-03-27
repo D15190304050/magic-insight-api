@@ -20,12 +20,18 @@ public class UserContextService
     private UserContextService()
     {
     }
-
+    /*
+        根据token认证？不太理解
+     */
     public static void setAuthentication(UsernamePasswordAuthenticationToken authenticationToken)
     {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
+    /*
+    SecurityContextHolder is a tool(utility) class provided by Spring Security, used to store the security context of the current thread
+    method getContext() returns the SecurityContext object of current thread
+     */
     public static Authentication getAuthentication()
     {
         return SecurityContextHolder.getContext().getAuthentication();

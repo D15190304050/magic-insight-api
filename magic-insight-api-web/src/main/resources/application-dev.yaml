@@ -1,10 +1,10 @@
 spring:
     datasource:
-        url: jdbc:mysql://localhost:3306/magic_insight?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3309/magic_insight?useUnicode=true&characterEncoding=utf8
         hikari:
             driver-class-name: com.mysql.cj.jdbc.Driver
-            username: DinoStark
-            password: non-feeling
+            username: root
+            password: 123456
     cloud:
         nacos:
             discovery:
@@ -43,4 +43,4 @@ logging:
         stark.magicinsight.dao: DEBUG
 
 doubao:
-    model-endpoint: ep-20240917215653-hmx7x
+    model-endpoint: ep-20250320170652-f9j79
