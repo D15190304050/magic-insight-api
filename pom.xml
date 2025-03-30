@@ -128,10 +128,10 @@
                     <domainModuleName>magic-insight-api-domain</domainModuleName>
                     <schemaPackage>stark.magicinsight.domain.schemas</schemaPackage>
                     <entityPackage>stark.magicinsight.domain.entities</entityPackage>
-                    <jdbcUrl>jdbc:mysql://localhost:3306/magic_insight?useUnicode=true&amp;characterEncoding=utf8</jdbcUrl>
-                    <username>DinoStark</username>
-                    <password>non-feeling</password>
-                    <sqlOutputFilePath>D:/DinoStark/Temp/k.sql</sqlOutputFilePath>
+                    <jdbcUrl>jdbc:mysql://localhost:3309/magic_insight?useUnicode=true&amp;characterEncoding=utf8</jdbcUrl>
+                    <username>root</username>
+                    <password>123456</password>
+                    <sqlOutputFilePath>D:/Rachel/Temp/k.sql</sqlOutputFilePath>
                     <backwardCount>1</backwardCount>
                 </configuration>
             </plugin>
