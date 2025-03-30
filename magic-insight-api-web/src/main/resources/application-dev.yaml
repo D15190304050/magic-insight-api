@@ -30,6 +30,7 @@ dataworks:
         bucket-name-videos: magic-videos
         bucket-name-video-subtitles: magic-video-subtitles
         bucket-name-summaries: magic-video-summaries
+        bucket-name-analyzed-videos: magic-analyzed-videos
 
 images:
     avatar-url-prefix: http://localhost:${server.port}/avatar/

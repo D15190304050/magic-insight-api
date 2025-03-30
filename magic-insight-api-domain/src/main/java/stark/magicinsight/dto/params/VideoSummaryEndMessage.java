@@ -7,4 +7,5 @@ public class VideoSummaryEndMessage
 {
     private long videoId;
     private String subtitleObjectName;
+    private String markedVideoObjectName;
 }
