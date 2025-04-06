@@ -19,8 +19,8 @@ public class DoubaoAnalyzer
     public static final String ANALYSIS_FILE_SUFFIX = ".json";
 
     public static final String SEND_TRANSCRIPT_PREFIX = "我这里有一份字幕，你接下来的回答都要严格根据这份字幕里的内容生成，下面是我的字幕\n";
-    public static final String TRANSCRIPT_MODIFY = "这是我从视频中提取出的字幕文件，我需要你把修正后的纯字幕文件内容给我。要求如下：1、帮我修正一下识别后的错别字，如无法修正无需进行说明；2、删除因多人同时说话导致的语音识别到的重复内容；3、你返回给我的文字中不需要做其他多余操作（如不能进行备注与说明，不能丢失时间信息）";
-    public static final String TRANSCRIPT_ANALYSIS = "请你基于我已初步修正的字幕文件，找出老师的核心提问,学生的回答，以及老师的反馈有哪些，把原文内容一一列举出来。";
+    public static final String TRANSCRIPT_MODIFY = "这是我从视频中提取出的字幕文件，我需要你把修正后的纯字幕文件内容给我。要求如下：1、帮我修正一下识别后的错别字，如无法修正无需进行说明；2、删除因多人同时说话导致的语音识别到的重复内容；3、你返回给我的文字中不需要做其他多余操作（如不能进行备注与说明）";
+    public static final String TRANSCRIPT_ANALYSIS = "请你基于我已初步修正的字幕文件，找出老师的核心提问,学生的回答，以及老师的反馈有哪些，把原文内容一一列举出来。注意question的type字段只是该集合元素：{\"是何问题\"，\"为何问题\"，\"如何问题\"，\"若何问题\"}，feedback的type字段只是该集合元素：{\"激励\"，\"否定\"，\"重复\"，\"针对肯定\"，\"简单肯定\"}";
     public static final String TRANSCRIPT_STRUCTURE =
             """
                     你的回答需要遵照以下输出格式：
@@ -28,18 +28,30 @@ public class DoubaoAnalyzer
                         {
                             "interactionRecords": [
                                 {
-                                    "question": "",
-                                    "answers": [""],
-                                    "feedback": ""
+                                   "question": {
+                                      "content":"",
+                                      "type":""
+                                   },
+                                   "answers": [""],
+                                   "feedback": {
+                                      "content":"",
+                                      "type":""
+                                   }
                                 },
                                 {
-                                    "question": "",
-                                    "answers": [""],
-                                    "feedback": ""
+                                   "question": {
+                                      "content":"",
+                                      "type":""
+                                   },
+                                   "answers": [""],
+                                   "feedback": {
+                                      "content":"",
+                                      "type":""
+                                   }
                                 }
                             ]
                         }""";
-
+    public static final String TRANSCRIPT_AICOURSEOVERVIEW ="请你基于我已初步修正的字幕文件，给出这节课的课程总览（150字左右），格式如：本节课主要讲了...的内容，介绍了...，讲解了...";
     @Autowired
     private DoubaoMultiRoundChatSessionFactory doubaoMultiRoundChatSessionFactory;
 
@@ -67,6 +79,7 @@ public class DoubaoAnalyzer
         int totalSeconds = Integer.parseInt(hhmmss[0]) * 3600
                 + Integer.parseInt(hhmmss[1]) * 60
                 + Integer.parseInt(hhmmss[2]);
+        speechRateAnalysis.setTotalSeconds(totalSeconds);
         int speed = wordCount / totalSeconds;
         speechRateAnalysis.setValue(speed);
         String analysisOfSpeechRate = connection2.runChat("当老师授课语速为" + speed + "分/秒时，你有什么建议，100字左右。");
@@ -81,7 +94,7 @@ public class DoubaoAnalyzer
         int evaluationCount = 0;
         for (InteractionRecord record : interactionRecords)
         {
-            if (record.getFeedback() != null && !record.getFeedback().isEmpty()) evaluationCount++;
+            if (record.getFeedback() != null) evaluationCount++;
         }
         questionAnalysis.setEvaluationCount(evaluationCount);
         String analysisOfQuestioning = connection2.runChat("当老师在总时长为"+totalSeconds+"秒的课堂中，提问次数为"+"coreQuestionCount"+"次时，请你给出评价,50字左右");
@@ -89,6 +102,10 @@ public class DoubaoAnalyzer
         String analysisOfEvaluation =  connection2.runChat("当老师在总时长为"+totalSeconds+"秒的课堂中，对于学生的回答，反馈次数为"+"evaluationCount"+"次时，请你给出评价,50字左右");
         questionAnalysis.setAnalysisOfEvaluation(analysisOfEvaluation);
         transcriptAnalysis.setQuestionAnalysis(questionAnalysis);
+
+        //AI课程总览
+        String aiCourseOverview = connection2.runChat(TRANSCRIPT_AICOURSEOVERVIEW);
+        transcriptAnalysis.setAiCourseOverview(aiCourseOverview);
         return transcriptAnalysis;
     }
 
