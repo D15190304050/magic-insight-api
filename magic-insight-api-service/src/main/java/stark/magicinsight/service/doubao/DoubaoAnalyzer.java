@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stark.dataworks.basic.data.json.JsonSerializer;
-import stark.magicinsight.dto.results.InteractionRecord;
-import stark.magicinsight.dto.results.QuestionAnalysis;
-import stark.magicinsight.dto.results.SpeechRateAnalysis;
-import stark.magicinsight.dto.results.TranscriptAnalysis;
+import stark.magicinsight.dto.results.*;
 
 import java.util.List;
 
@@ -51,7 +48,7 @@ public class DoubaoAnalyzer
                                 }
                             ]
                         }""";
-    public static final String TRANSCRIPT_AICOURSEOVERVIEW ="请你基于我已初步修正的字幕文件，给出这节课的课程总览（150字左右），格式如：本节课主要讲了...的内容，介绍了...，讲解了...";
+    public static final String TRANSCRIPT_AICOURSEOVERVIEW = "请你基于我已初步修正的字幕文件，给出这节课的课程总览（150字左右），格式如：本节课主要讲了...的内容，介绍了...，讲解了...";
     @Autowired
     private DoubaoMultiRoundChatSessionFactory doubaoMultiRoundChatSessionFactory;
 
@@ -97,15 +94,17 @@ public class DoubaoAnalyzer
             if (record.getFeedback() != null) evaluationCount++;
         }
         questionAnalysis.setEvaluationCount(evaluationCount);
-        String analysisOfQuestioning = connection2.runChat("当老师在总时长为"+totalSeconds+"秒的课堂中，提问次数为"+"coreQuestionCount"+"次时，请你给出评价,50字左右");
+        String analysisOfQuestioning = connection2.runChat("当老师在总时长为" + totalSeconds + "秒的课堂中，提问次数为" + coreQuestionCount + "次时，请你给出评价,50字左右");
         questionAnalysis.setAnalysisOfQuestioning(analysisOfQuestioning);
-        String analysisOfEvaluation =  connection2.runChat("当老师在总时长为"+totalSeconds+"秒的课堂中，对于学生的回答，反馈次数为"+"evaluationCount"+"次时，请你给出评价,50字左右");
+        String analysisOfEvaluation = connection2.runChat("当老师在总时长为" + totalSeconds + "秒的课堂中，对于学生的回答，反馈次数为" + evaluationCount + "次时，请你给出评价,50字左右");
         questionAnalysis.setAnalysisOfEvaluation(analysisOfEvaluation);
         transcriptAnalysis.setQuestionAnalysis(questionAnalysis);
 
         //AI课程总览
         String aiCourseOverview = connection2.runChat(TRANSCRIPT_AICOURSEOVERVIEW);
-        transcriptAnalysis.setAiCourseOverview(aiCourseOverview);
+        CourseAnalysis courseAnalysis = new CourseAnalysis();
+        courseAnalysis.setAiCourseOverview(aiCourseOverview);
+        transcriptAnalysis.setCourseAnalysis(courseAnalysis);
         return transcriptAnalysis;
     }
 

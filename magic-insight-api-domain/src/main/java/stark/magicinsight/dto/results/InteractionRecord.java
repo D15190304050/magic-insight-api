@@ -1,8 +1,6 @@
 package stark.magicinsight.dto.results;
 
 import lombok.Data;
-import stark.magicinsight.domain.entities.Feedback;
-import stark.magicinsight.domain.entities.Question;
 
 import java.util.List;
 

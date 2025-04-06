@@ -1,9 +1,9 @@
-package stark.magicinsight.domain.entities;
+package stark.magicinsight.dto.results;
 
 import lombok.Data;
 
 @Data
-public class Question
+public class Feedback
 {
     private String content;
     private String type;

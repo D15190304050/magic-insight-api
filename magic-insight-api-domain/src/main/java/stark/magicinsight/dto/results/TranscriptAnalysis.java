@@ -9,5 +9,5 @@ public class TranscriptAnalysis {
     private SpeechRateAnalysis speechRateAnalysis;
     private QuestionAnalysis questionAnalysis;
     private List<InteractionRecord> interactionRecords;
-    private String aiCourseOverview;
+    private CourseAnalysis courseAnalysis;
 }
