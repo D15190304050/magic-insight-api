@@ -69,7 +69,7 @@ public class ConsumerService
         }
     }
 
-    public void handleMessage(VideoSummaryEndMessage summaryEndMessage) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    public TranscriptAnalysis handleMessage(VideoSummaryEndMessage summaryEndMessage) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         long videoId = summaryEndMessage.getVideoId();
         String subtitleObjectName = summaryEndMessage.getSubtitleObjectName();
@@ -89,6 +89,8 @@ public class ConsumerService
         }
 
         saveAnalysis(videoId, analysis);
+
+        return analysis;
     }
 
     private String getTranscript(String subtitleObjectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
