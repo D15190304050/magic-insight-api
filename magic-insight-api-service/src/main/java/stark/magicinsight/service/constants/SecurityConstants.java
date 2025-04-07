@@ -33,6 +33,7 @@ public class SecurityConstants
                     "/video/play",
                     "/comment/list",
                     "user-following/following-list",
-                    "user-following/follower-list"
+                    "user-following/follower-list",
+                    "test/hi"
             };
 }

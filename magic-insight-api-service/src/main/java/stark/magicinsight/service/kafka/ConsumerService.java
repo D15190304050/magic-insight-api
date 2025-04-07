@@ -13,7 +13,8 @@ import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.autoconfig.minio.EasyMinio;
 import stark.magicinsight.dao.UserVideoInfoMapper;
 import stark.magicinsight.dto.params.VideoSummaryEndMessage;
-import stark.magicinsight.dto.results.TranscriptSummary;
+import stark.magicinsight.dto.results.TranscriptAnalysis;
+import stark.magicinsight.service.doubao.DoubaoAnalyzer;
 import stark.magicinsight.service.doubao.DoubaoSummarizer;
 
 import java.io.IOException;
@@ -38,10 +39,9 @@ public class ConsumerService
     private EasyMinio easyMinio;
 
     @Autowired
-    private DoubaoSummarizer doubaoSummarizer;
-
-    @Autowired
     private UserVideoInfoMapper userVideoInfoMapper;
+    @Autowired
+    private DoubaoAnalyzer doubaoAnalyzer;
 
     @KafkaListener(topics = {"${spring.kafka.consumer.topic-summary-video-end}"},
             groupId = "${spring.kafka.consumer.group-id}",
@@ -59,28 +59,24 @@ public class ConsumerService
             String subtitleObjectName = summaryEndMessage.getSubtitleObjectName();
 
             String transcript = getTranscript(subtitleObjectName);
-            TranscriptSummary summary;
+            TranscriptAnalysis analysis;
 
             // We don't generate summary for transcript with length less than SUMMARY_THRESHOLD.
             if (StringUtils.hasText(transcript) && transcript.length() > SUMMARY_THRESHOLD)
             {
-//                summary = doubaoSummarizer.summarize(transcript);
-                summary = new TranscriptSummary();
-                log.info("Summary = {}", JsonSerializer.serialize(summary));
-            }
-            else
+                analysis = doubaoAnalyzer.analyze(transcript);
+                log.info("Analysis = {}", JsonSerializer.serialize(analysis));
+            } else
             {
-                summary = new TranscriptSummary();
-                summary.setCanSummarize(false);
+                analysis = new TranscriptAnalysis();
+//                analysis.setCanSummarize(false);
             }
 
-            saveSummary(videoId, summary);
-        }
-        catch (Exception e)
+            saveAnalysis(videoId, analysis);
+        } catch (Exception e)
         {
             log.error("Error consuming message, value = {}", message, e);
-        }
-        finally
+        } finally
         {
             // Submit offset manually.
             ack.acknowledge();
@@ -88,6 +84,10 @@ public class ConsumerService
         }
     }
 
+    public void handleMessage(VideoSummaryEndMessage summaryEndMessage)
+    {
+
+    }
     private String getTranscript(String subtitleObjectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         InputStream objectInputStream = easyMinio.getObjectInputStream(bucketNameVideoSubtitles, subtitleObjectName);
@@ -95,20 +95,20 @@ public class ConsumerService
         return new String(byteContent, StandardCharsets.UTF_8);
     }
 
-    private void saveSummary(long videoId, TranscriptSummary transcriptSummary) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    private void saveAnalysis(long videoId, TranscriptAnalysis transcriptAnalysis) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
-        String summaryFileName = saveSummaryToMinio(videoId, transcriptSummary);
-        saveSummaryFileNameToDb(videoId, summaryFileName);
+        String analysisFileName = saveAnalysisToMinio(videoId, transcriptAnalysis);
+        saveAnalysisFileNameToDb(videoId, analysisFileName);
     }
 
-    private String saveSummaryToMinio(long videoId, TranscriptSummary transcriptSummary) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    private String saveAnalysisToMinio(long videoId, TranscriptAnalysis transcriptAnalysis) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
-        String summaryFileName = DoubaoSummarizer.getSummaryFileName(videoId);
-        easyMinio.putObject(bucketNameSummaries, summaryFileName, transcriptSummary);
-        return summaryFileName;
+        String analysisFileName = DoubaoAnalyzer.getAnalysisFileName(videoId);
+        easyMinio.putObject(bucketNameSummaries, analysisFileName, transcriptAnalysis);
+        return analysisFileName;
     }
 
-    private void saveSummaryFileNameToDb(long videoId, String summaryFileName)
+    private void saveAnalysisFileNameToDb(long videoId, String summaryFileName)
     {
         userVideoInfoMapper.setVideoSummaryFileNameById(videoId, summaryFileName);
     }
