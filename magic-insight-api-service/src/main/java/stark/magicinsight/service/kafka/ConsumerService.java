@@ -55,28 +55,13 @@ public class ConsumerService
         try
         {
             VideoSummaryEndMessage summaryEndMessage = JsonSerializer.deserialize(message, VideoSummaryEndMessage.class);
-            long videoId = summaryEndMessage.getVideoId();
-            String subtitleObjectName = summaryEndMessage.getSubtitleObjectName();
-
-            String transcript = getTranscript(subtitleObjectName);
-            TranscriptAnalysis analysis;
-
-            // We don't generate summary for transcript with length less than SUMMARY_THRESHOLD.
-            if (StringUtils.hasText(transcript) && transcript.length() > SUMMARY_THRESHOLD)
-            {
-                analysis = doubaoAnalyzer.analyze(transcript);
-                log.info("Analysis = {}", JsonSerializer.serialize(analysis));
-            } else
-            {
-                analysis = new TranscriptAnalysis();
-//                analysis.setCanSummarize(false);
-            }
-
-            saveAnalysis(videoId, analysis);
-        } catch (Exception e)
+            handleMessage(summaryEndMessage);
+        }
+        catch (Exception e)
         {
             log.error("Error consuming message, value = {}", message, e);
-        } finally
+        }
+        finally
         {
             // Submit offset manually.
             ack.acknowledge();
@@ -84,10 +69,28 @@ public class ConsumerService
         }
     }
 
-    public void handleMessage(VideoSummaryEndMessage summaryEndMessage)
+    public void handleMessage(VideoSummaryEndMessage summaryEndMessage) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
+        long videoId = summaryEndMessage.getVideoId();
+        String subtitleObjectName = summaryEndMessage.getSubtitleObjectName();
 
+        String transcript = getTranscript(subtitleObjectName);
+        TranscriptAnalysis analysis;
+
+        // We don't generate summary for transcript with length less than SUMMARY_THRESHOLD.
+        if (StringUtils.hasText(transcript) && transcript.length() > SUMMARY_THRESHOLD)
+        {
+            analysis = doubaoAnalyzer.analyze(transcript);
+            log.info("Analysis = {}", JsonSerializer.serialize(analysis));
+        }
+        else
+        {
+            analysis = new TranscriptAnalysis();
+        }
+
+        saveAnalysis(videoId, analysis);
     }
+
     private String getTranscript(String subtitleObjectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         InputStream objectInputStream = easyMinio.getObjectInputStream(bucketNameVideoSubtitles, subtitleObjectName);
