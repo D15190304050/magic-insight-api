@@ -34,6 +34,6 @@ public class SecurityConstants
                     "/comment/list",
                     "user-following/following-list",
                     "user-following/follower-list",
-                    "test/hi"
+                    "/test/analyze"
             };
 }

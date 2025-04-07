@@ -44,4 +44,4 @@ logging:
         stark.magicinsight.dao: DEBUG
 
 doubao:
-    model-endpoint: ep-20240917215653-hmx7x
+    model-endpoint: ep-20250320170652-f9j79

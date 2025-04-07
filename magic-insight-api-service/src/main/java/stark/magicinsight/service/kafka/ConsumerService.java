@@ -14,8 +14,7 @@ import stark.dataworks.boot.autoconfig.minio.EasyMinio;
 import stark.magicinsight.dao.UserVideoInfoMapper;
 import stark.magicinsight.dto.params.VideoSummaryEndMessage;
 import stark.magicinsight.dto.results.TranscriptAnalysis;
-import stark.magicinsight.service.doubao.DoubaoAnalyzer;
-import stark.magicinsight.service.doubao.DoubaoSummarizer;
+import stark.magicinsight.service.doubao.TranscriptAnalyzer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +40,7 @@ public class ConsumerService
     @Autowired
     private UserVideoInfoMapper userVideoInfoMapper;
     @Autowired
-    private DoubaoAnalyzer doubaoAnalyzer;
+    private TranscriptAnalyzer transcriptAnalyzer;
 
     @KafkaListener(topics = {"${spring.kafka.consumer.topic-summary-video-end}"},
             groupId = "${spring.kafka.consumer.group-id}",
@@ -50,7 +49,7 @@ public class ConsumerService
     public void handleMessage(ConsumerRecord<String, String> record, Acknowledgment ack)
     {
         String message = record.value();
-        log.info("Received data, topic = {}，value = {}", record.topic(), message);
+        log.info("Received data, topic = {}, value = {}", record.topic(), message);
 
         try
         {
@@ -80,7 +79,7 @@ public class ConsumerService
         // We don't generate summary for transcript with length less than SUMMARY_THRESHOLD.
         if (StringUtils.hasText(transcript) && transcript.length() > SUMMARY_THRESHOLD)
         {
-            analysis = doubaoAnalyzer.analyze(transcript);
+            analysis = transcriptAnalyzer.analyze(transcript);
             log.info("Analysis = {}", JsonSerializer.serialize(analysis));
         }
         else
@@ -108,7 +107,7 @@ public class ConsumerService
 
     private String saveAnalysisToMinio(long videoId, TranscriptAnalysis transcriptAnalysis) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
-        String analysisFileName = DoubaoAnalyzer.getAnalysisFileName(videoId);
+        String analysisFileName = TranscriptAnalyzer.getAnalysisFileName(videoId);
         easyMinio.putObject(bucketNameSummaries, analysisFileName, transcriptAnalysis);
         return analysisFileName;
     }
