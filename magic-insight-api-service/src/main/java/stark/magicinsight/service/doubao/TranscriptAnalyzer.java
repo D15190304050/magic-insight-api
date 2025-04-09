@@ -79,7 +79,7 @@ public class TranscriptAnalyzer
         transcriptAnalysis.setQuestionAnalysis(questionAnalysis);
 
         //各个互动类型次数统计
-        Map<String, Map<String, Integer>> interactionTypeCountMap = interactionTypeAnalyze(interactionRecords);
+        InteractionTypeStats interactionTypeCountMap = interactionTypeAnalyze(interactionRecords);
         transcriptAnalysis.setInteractionTypeCountMap(interactionTypeCountMap);
         return transcriptAnalysis;
     }
@@ -171,46 +171,80 @@ public class TranscriptAnalyzer
         return courseAnalysis;
     }
 
-    public static Map<String, Map<String, Integer>> interactionTypeAnalyze(List<InteractionRecord> records)
-    {
+    public static InteractionTypeStats interactionTypeAnalyze(List<InteractionRecord> records) {
         // 定义需要统计的类型（常量）
         String[] FEEDBACK_TYPES = {"激励", "否定", "重复", "针对肯定", "简单肯定"};
         String[] QUESTION_TYPES = {"是何问题", "为何问题", "如何问题", "若何问题"};
 
-        // 初始化统计Map（所有类型预设为0）
-        Map<String, Integer> feedbackStats = new HashMap<>();
-        Map<String, Integer> questionStats = new HashMap<>();
+        // 初始化统计对象（所有类型预设为0）
+        FeedbackCounts feedbackCounts = new FeedbackCounts();
+        QuestionCounts questionCounts = new QuestionCounts();
 
-        for (String type : FEEDBACK_TYPES)
-        {
-            feedbackStats.put(type, 0);
-        }
-        for (String type : QUESTION_TYPES)
-        {
-            questionStats.put(type, 0);
-        }
+        // 初始化所有计数为0
+        feedbackCounts.setMotivate(0);
+        feedbackCounts.setNegative(0);
+        feedbackCounts.setRepeat(0);
+        feedbackCounts.setTargetedAffirmative(0);
+        feedbackCounts.setSimpleAffirmative(0);
+
+        questionCounts.setWhat(0);
+        questionCounts.setWhy(0);
+        questionCounts.setHow(0);
+        questionCounts.setWhatIf(0);
 
         // 遍历记录并统计
-        for (InteractionRecord record : records)
-        {
+        for (InteractionRecord record : records) {
             // 统计问题类型（跳过空值）
             String qType = record.getQuestion().getType();
-            if (qType != null && !qType.isEmpty() && questionStats.containsKey(qType))
-            {
-                questionStats.put(qType, questionStats.get(qType) + 1);
+            if (qType != null && !qType.isEmpty()) {
+                switch (qType) {
+                    case "是何问题":
+                        questionCounts.setWhat(questionCounts.getWhat() + 1);
+                        break;
+                    case "为何问题":
+                        questionCounts.setWhy(questionCounts.getWhy() + 1);
+                        break;
+                    case "如何问题":
+                        questionCounts.setHow(questionCounts.getHow() + 1);
+                        break;
+                    case "若何问题":
+                        questionCounts.setWhatIf(questionCounts.getWhatIf() + 1);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             // 统计反馈类型（跳过空值）
             String fType = record.getFeedback().getType();
-            if (fType != null && !fType.isEmpty() && feedbackStats.containsKey(fType))
-            {
-                feedbackStats.put(fType, feedbackStats.get(fType) + 1);
+            if (fType != null && !fType.isEmpty()) {
+                switch (fType) {
+                    case "激励":
+                        feedbackCounts.setMotivate(feedbackCounts.getMotivate() + 1);
+                        break;
+                    case "否定":
+                        feedbackCounts.setNegative(feedbackCounts.getNegative() + 1);
+                        break;
+                    case "重复":
+                        feedbackCounts.setRepeat(feedbackCounts.getRepeat() + 1);
+                        break;
+                    case "针对肯定":
+                        feedbackCounts.setTargetedAffirmative(feedbackCounts.getTargetedAffirmative() + 1);
+                        break;
+                    case "简单肯定":
+                        feedbackCounts.setSimpleAffirmative(feedbackCounts.getSimpleAffirmative() + 1);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-        // 返回双层级结果
-        Map<String, Map<String, Integer>> result = new HashMap<>();
-        result.put("question", questionStats);
-        result.put("feedback", feedbackStats);
+
+        // 将统计结果封装到 InteractionTypeStats 对象中并返回
+        InteractionTypeStats result = new InteractionTypeStats();
+        result.setQuestionCounts(questionCounts);
+        result.setFeedbackCounts(feedbackCounts);
+
         return result;
     }
 

@@ -20,6 +20,7 @@ import stark.magicinsight.dao.*;
 import stark.magicinsight.domain.entities.UserVideoInfo;
 import stark.magicinsight.dto.params.*;
 import stark.magicinsight.dto.results.TopicSummaryVideoStartMessage;
+import stark.magicinsight.dto.results.TranscriptAnalysis;
 import stark.magicinsight.dto.results.TranscriptSummary;
 import stark.magicinsight.dto.results.VideoPlayInfo;
 import stark.magicinsight.service.dto.User;
@@ -510,5 +511,15 @@ public class VideoService
 
         TranscriptSummary summary = easyMinio.getObject(bucketNameSummaries, videoSummaryFileName, TranscriptSummary.class);
         return ServiceResponse.buildSuccessResponse(summary);
+    }
+
+    public ServiceResponse<TranscriptAnalysis> getAnalysisOfVideo(long videoId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        String videoSummaryFileName = userVideoInfoMapper.getVideoSummaryFileNameById(videoId);
+        if (videoSummaryFileName == null)
+            return ServiceResponse.buildErrorResponse(-1, "There is no related summary for the video.");
+
+        TranscriptAnalysis analysis = easyMinio.getObject(bucketNameSummaries, videoSummaryFileName, TranscriptAnalysis.class);
+        return ServiceResponse.buildSuccessResponse(analysis);
     }
 }

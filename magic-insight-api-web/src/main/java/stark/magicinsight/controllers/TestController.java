@@ -27,6 +27,12 @@ public class TestController
         return "hi";
     }
 
+//    @PostMapping("/analyze")
+//    public ServiceResponse<TranscriptAnalysis> testTranscriptAnalysis(@RequestBody VideoSummaryEndMessage videoSummaryEndMessage) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+//    {
+//        TranscriptAnalysis transcriptAnalysis = consumerService.handleMessage(videoSummaryEndMessage);
+//        return ServiceResponse.buildSuccessResponse(transcriptAnalysis);
+//    }
     @PostMapping("/analyze")
     public ServiceResponse<TranscriptAnalysis> testTranscriptAnalysis(@RequestBody VideoSummaryEndMessage videoSummaryEndMessage) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {

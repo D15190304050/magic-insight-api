@@ -80,14 +80,14 @@ public class ConsumerService
         if (StringUtils.hasText(transcript) && transcript.length() > SUMMARY_THRESHOLD)
         {
             analysis = transcriptAnalyzer.analyze(transcript);
-            log.info("Analysis = {}", JsonSerializer.serialize(analysis));
         }
         else
         {
             analysis = new TranscriptAnalysis();
         }
-
+        log.info("videoId = "+videoId);
         saveAnalysis(videoId, analysis);
+
 
         return analysis;
     }
