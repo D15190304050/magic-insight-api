@@ -18,7 +18,7 @@ public class TranscriptAnalyzer
     public static final String ANALYSIS_FILE_SUFFIX = ".json";
 
     public static final String SEND_TRANSCRIPT_PREFIX = "我这里有一份字幕，你接下来的回答都要严格根据这份字幕里的内容生成，下面是我的字幕\n";
-    public static final String TRANSCRIPT_MODIFY = "这是我从视频中提取出的字幕文件，我需要你把修正后的纯字幕文件内容给我。要求如下：1、帮我修正一下识别后的错别字，如无法修正无需进行说明；2、删除因多人同时说话导致的语音识别到的重复内容；3、你返回给我的文字中不需要做其他多余操作（如不能进行备注与说明）";
+    public static final String TRANSCRIPT_MODIFY = "这是我从视频中提取出的字幕文件，我需要你把修正后的纯字幕文件内容给我。要求如下：1、帮我修正一下识别后的错别字，如无法修正无需进行说明；2、删除因多人同时说话导致的语音识别到的重复内容；3、你返回给我的文字中不需要做其他多余操作（如不能进行备注与说明，无需保留时间信息）";
     public static final String TRANSCRIPT_ANALYSIS = "请你基于我已初步修正的字幕文件，找出老师的核心提问,学生的回答，以及老师的反馈有哪些，把原文内容一一列举出来。注意question的type字段只是该集合元素：{\"是何问题\"，\"为何问题\"，\"如何问题\"，\"若何问题\"}，feedback的type字段只是该集合元素：{\"激励\"，\"否定\"，\"重复\"，\"针对肯定\"，\"简单肯定\"}";
     public static final String TRANSCRIPT_STRUCTURE =
             """
