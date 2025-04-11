@@ -18,6 +18,9 @@ public class UserVideoInfo extends DomainBase
     @Column(type = "VARCHAR(255)")
     private String nameInOss;
 
+    @Column(type = "VARCHAR(255)")
+    private String markedNameInOss;
+
     /**
      * Title of the video.
      */

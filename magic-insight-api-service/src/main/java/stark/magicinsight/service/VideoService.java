@@ -490,7 +490,7 @@ public class VideoService
         String videoPlayUrlKey = redisKeyManager.getVideoPlayUrlKey(videoId);
         String videoPlayUrl = redisQuickOperation.get(videoPlayUrlKey);
 
-        String markedVideoPlayUrlKey = redisKeyManager.getVideoPlayUrlKey(videoId);
+        String markedVideoPlayUrlKey = redisKeyManager.getMarkedVideoPlayUrlKey(videoId);
         String markedVideoPlayUrl = redisQuickOperation.get(markedVideoPlayUrlKey);
 
         // TODO: We may need a distributed lock here to prevent concurrent query of same object urls.
@@ -501,8 +501,8 @@ public class VideoService
         }
         if (markedVideoPlayUrl == null)
         {
-            markedVideoPlayUrl = easyMinio.getObjectUrl(bucketNameVideos, videoPlayInfo.getNameInOss());
-            redisQuickOperation.set(markedVideoPlayUrl, markedVideoPlayUrl, 5, TimeUnit.MINUTES);
+            markedVideoPlayUrl = easyMinio.getObjectUrl(bucketNameVideos, videoPlayInfo.getMarkedNameInOss());
+            redisQuickOperation.set(markedVideoPlayUrlKey, markedVideoPlayUrl, 5, TimeUnit.MINUTES);
         }
 
         videoPlayInfo.setVideoPlayUrl(videoPlayUrl);
