@@ -52,6 +52,9 @@ public class VideoService
     @Value("${dataworks.easy-minio.bucket-name-videos}")
     private String bucketNameVideos;
 
+    @Value("${dataworks.easy-minio.bucket-name-analyzed-videos}")
+    private String bucketNameMarkedVideos;
+
     @Value("${dataworks.easy-minio.bucket-name-summaries}")
     private String bucketNameSummaries;
 
@@ -501,13 +504,12 @@ public class VideoService
         }
         if (markedVideoPlayUrl == null)
         {
-            markedVideoPlayUrl = easyMinio.getObjectUrl(bucketNameVideos, videoPlayInfo.getMarkedNameInOss());
+            markedVideoPlayUrl = easyMinio.getObjectUrl(bucketNameMarkedVideos, videoPlayInfo.getMarkedNameInOss());
             redisQuickOperation.set(markedVideoPlayUrlKey, markedVideoPlayUrl, 5, TimeUnit.MINUTES);
         }
 
         videoPlayInfo.setVideoPlayUrl(videoPlayUrl);
         videoPlayInfo.setMarkedVideoPlayUrl(markedVideoPlayUrl);
-
 
         videoPlayInfo.setPlayCount(videoPlayInfo.getPlayCount() + 1);
         return ServiceResponse.buildSuccessResponse(videoPlayInfo);
@@ -527,7 +529,7 @@ public class VideoService
     {
         String videoSummaryFileName = userVideoInfoMapper.getVideoSummaryFileNameById(videoId);
         if (videoSummaryFileName == null)
-            return ServiceResponse.buildErrorResponse(-1, "There is no related summary for the video.");
+            return ServiceResponse.buildErrorResponse(-1, "There is no related analysis for the video.");
 
         TranscriptAnalysis analysis = easyMinio.getObject(bucketNameSummaries, videoSummaryFileName, TranscriptAnalysis.class);
         return ServiceResponse.buildSuccessResponse(analysis);

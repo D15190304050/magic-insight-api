@@ -17,6 +17,7 @@
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="nameInOss" column="name_in_oss"/>
+        <result property="markedNameInOss" column="marked_name_in_oss"/>
         <result property="coverUrl" column="cover_url"/>
         <result property="introduction" column="introduction"/>
         <result property="creatorId" column="creator_id"/>
@@ -114,16 +115,17 @@
 
     <!-- TODO: Optimize the join here, try to reduce the count of joins. -->
     <select id="getVideoPlayInfoById" resultMap="VideoPlayInfoMap">
-        SELECT uvi.`id`                                       AS `id`,
-               uvi.`title`                                    AS `title`,
-               uvi.`name_in_oss`                              AS `name_in_oss`,
-               uvi.`cover_url`                                AS `cover_url`,
-               uvi.`introduction`                             AS `introduction`,
-               uvi.`creator_id`                               AS `creator_id`,
-               abi.`username`                                 AS `creator_name`,
-               uvi.`creation_time`                            AS `creation_time`,
-               uvi.`modification_time`                        AS `modification_time`,
-               COALESCE(uvc.comment_count, 0)                 AS `comment_count`
+        SELECT uvi.`id`                       AS `id`,
+               uvi.`title`                    AS `title`,
+               uvi.`name_in_oss`              AS `name_in_oss`,
+               uvi.`marked_name_in_oss`       AS `marked_name_in_oss`,
+               uvi.`cover_url`                AS `cover_url`,
+               uvi.`introduction`             AS `introduction`,
+               uvi.`creator_id`               AS `creator_id`,
+               abi.`username`                 AS `creator_name`,
+               uvi.`creation_time`            AS `creation_time`,
+               uvi.`modification_time`        AS `modification_time`,
+               COALESCE(uvc.comment_count, 0) AS `comment_count`
         FROM `user_video_info` uvi
         LEFT JOIN
         (

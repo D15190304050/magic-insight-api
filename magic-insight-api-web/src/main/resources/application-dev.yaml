@@ -16,9 +16,9 @@ spring:
 #            port: 6379
             port: 10079
     kafka:
-        bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+        bootstrap-servers: localhost:9092
         consumer:
-            bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+            bootstrap-servers: localhost:9092
 
 dataworks:
     easy-minio:
