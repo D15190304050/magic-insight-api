@@ -63,7 +63,10 @@ public class TranscriptAnalyzer
 
         List<InteractionRecord> interactionRecords = JsonSerializer.deserializeList(analysisJsonText, InteractionRecord.class);
         TranscriptAnalysis transcriptAnalysis = new TranscriptAnalysis();
-        transcriptAnalysis.setInteractionRecords(interactionRecords);
+        if(interactionRecords.isEmpty())
+            transcriptAnalysis.setInteractionRecords(null);
+        else
+            transcriptAnalysis.setInteractionRecords(interactionRecords);
 
         //语速分析
         SpeechRateAnalysis speechRateAnalysis = analyzeSpeedRate(transcript, modify, connection2);
