@@ -29,4 +29,5 @@ public class VideoPlayInfo
 
     private String markedNameInOss;
     private String markedVideoPlayUrl;
+    private String transcript;
 }

@@ -44,4 +44,7 @@ public class UserVideoInfo extends DomainBase
      */
     @Column(type = "VARCHAR(255)")
     private String summaryFileName;
+
+    @Column(type = "VARCHAR(255)")
+    private String transcriptFileName;
 }

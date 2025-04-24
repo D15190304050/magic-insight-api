@@ -30,6 +30,8 @@ import jakarta.validation.Valid;
 import stark.magicinsight.service.redis.RedisKeyManager;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -48,6 +50,8 @@ public class VideoService
     public static final String VIDEO_FILE_EXTENSION = "-extension";
     public static final Set<String> VIDEO_FILE_EXTENSION_SET = Set.of(".mp4", ".avi");
     public static final int VIDEO_LIKE = 1;
+    @Value("${dataworks.easy-minio.bucket-name-video-subtitles}")
+    private String bucketNameVideoSubtitles;
 
     @Value("${dataworks.easy-minio.bucket-name-videos}")
     private String bucketNameVideos;
@@ -173,7 +177,6 @@ public class VideoService
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      * @throws InvalidResponseException
-     * @throws XmlParserException
      * @throws InternalException
      */
     public ServiceResponse<Long> composeVideoChunks(@Valid ComposeVideoChunksRequest request) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
@@ -286,10 +289,9 @@ public class VideoService
             try
             {
                 easyMinio.deleteObjects(bucketNameVideos, sortedChunkNames);
-            }
-            catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |
-                   NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
-                   InternalException e)
+            } catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |
+                     NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
+                     InternalException e)
             {
                 throw new RuntimeException(e);
             }
@@ -512,7 +514,22 @@ public class VideoService
         videoPlayInfo.setMarkedVideoPlayUrl(markedVideoPlayUrl);
 
         videoPlayInfo.setPlayCount(videoPlayInfo.getPlayCount() + 1);
+
+        UserVideoInfo userVideoInfo = userVideoInfoMapper.getVideoBaseInfoById(videoId);
+        String transcriptFileName = userVideoInfo.getTranscriptFileName();
+        if (transcriptFileName == null || transcriptFileName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Transcript file name cannot be null or empty");
+        }
+        String transcript = getTranscriptByTranscriptName(transcriptFileName);
+        videoPlayInfo.setTranscript(transcript);
         return ServiceResponse.buildSuccessResponse(videoPlayInfo);
+    }
+
+    private String getTranscriptByTranscriptName(String subtitleObjectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        InputStream objectInputStream = easyMinio.getObjectInputStream(bucketNameVideoSubtitles, subtitleObjectName);
+        byte[] byteContent = objectInputStream.readAllBytes();
+        return new String(byteContent, StandardCharsets.UTF_8);
     }
 
     public ServiceResponse<TranscriptSummary> getSummaryOfVideo(long videoId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException

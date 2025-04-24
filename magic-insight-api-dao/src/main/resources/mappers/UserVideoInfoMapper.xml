@@ -11,6 +11,7 @@
         <result property="creationTime" column="creation_time"/>
         <result property="modifierId" column="modifier_id"/>
         <result property="modificationTime" column="modification_time"/>
+        <result property="transcriptFileName" column="transcript_file_name"/>
     </resultMap>
 
     <resultMap id="VideoPlayInfoMap" type="stark.magicinsight.dto.results.VideoPlayInfo">
@@ -30,6 +31,7 @@
         <result property="commentCount" column="comment_count"/>
         <result property="userLikes" column="user_likes"/>
         <result property="userFavorites" column="user_favorites"/>
+        <result property="transcript" column="transcript"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -42,7 +44,8 @@
             `creator_id`,
             `creation_time`,
             `modifier_id`,
-            `modification_time`
+            `modification_time`,
+            `transcript_file_name`
         )
         VALUES
         (
@@ -53,7 +56,8 @@
             #{creatorId},
             #{creationTime},
             #{modifierId},
-            #{modificationTime}
+            #{modificationTime},
+            #{transcriptFileName}
         )
     </insert>
 
@@ -108,7 +112,8 @@
             `creator_id`,
             `creation_time`,
             `modifier_id`,
-            `modification_time`
+            `modification_time`,
+            `transcript_file_name`
         FROM `user_video_info`
         WHERE `id` = #{id}
     </select>
@@ -150,7 +155,7 @@
 
     <update id="setVideoSummaryFileNameById">
         UPDATE `user_video_info`
-        SET `summary_file_name` = #{summaryFileName}
+        SET `summary_file_name` = #{summaryFileName},`transcript_file_name` = #{transcriptFileName}
         WHERE `id` = #{id}
     </update>
 

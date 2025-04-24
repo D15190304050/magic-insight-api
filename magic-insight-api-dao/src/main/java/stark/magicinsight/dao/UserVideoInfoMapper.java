@@ -20,6 +20,6 @@ public interface UserVideoInfoMapper
     UserVideoInfo getVideoBaseInfoById(long id);
     VideoPlayInfo getVideoPlayInfoById(@Param("videoId") long videoId, @Param("userId") long userId);
     long countVideoById(long id);
-    long setVideoSummaryFileNameById(@Param("id") long id, @Param("summaryFileName") String summaryFileName);
+    long setVideoSummaryFileNameById(@Param("id") long id, @Param("summaryFileName") String summaryFileName,@Param("transcriptFileName") String transcriptFileName);
     String getVideoSummaryFileNameById(long id);
 }

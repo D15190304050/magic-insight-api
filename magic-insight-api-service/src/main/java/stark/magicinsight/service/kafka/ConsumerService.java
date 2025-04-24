@@ -86,7 +86,7 @@ public class ConsumerService
             analysis = new TranscriptAnalysis();
         }
         log.info("videoId = "+videoId);
-        saveAnalysis(videoId, analysis);
+        saveAnalysis(videoId, analysis, subtitleObjectName);
 
 
         return analysis;
@@ -99,10 +99,10 @@ public class ConsumerService
         return new String(byteContent, StandardCharsets.UTF_8);
     }
 
-    private void saveAnalysis(long videoId, TranscriptAnalysis transcriptAnalysis) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    private void saveAnalysis(long videoId, TranscriptAnalysis transcriptAnalysis,String transcriptFileName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         String analysisFileName = saveAnalysisToMinio(videoId, transcriptAnalysis);
-        saveAnalysisFileNameToDb(videoId, analysisFileName);
+        saveAnalysisFileNameToDb(videoId, analysisFileName,transcriptFileName);
     }
 
     private String saveAnalysisToMinio(long videoId, TranscriptAnalysis transcriptAnalysis) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
@@ -112,9 +112,9 @@ public class ConsumerService
         return analysisFileName;
     }
 
-    private void saveAnalysisFileNameToDb(long videoId, String summaryFileName)
+    private void saveAnalysisFileNameToDb(long videoId, String summaryFileName, String transcriptFileName)
     {
-        userVideoInfoMapper.setVideoSummaryFileNameById(videoId, summaryFileName);
+        userVideoInfoMapper.setVideoSummaryFileNameById(videoId, summaryFileName,transcriptFileName);
     }
 }
 
