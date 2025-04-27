@@ -41,10 +41,12 @@ public class SchemaSnapshot extends SchemaSnapshotBase {
         });
         schemaBuilder.table("user_video_info", builder -> {
             builder.column().name("name_in_oss").type("VARCHAR(255)").nullable(true).unique(false);
+            builder.column().name("marked_name_in_oss").type("VARCHAR(255)").nullable(true).unique(false);
             builder.column().name("title").type("VARCHAR(255)").nullable(true).unique(false);
             builder.column().name("cover_url").type("VARCHAR(255)").nullable(true).unique(false);
             builder.column().name("introduction").type("VARCHAR(1000)").nullable(true).unique(false);
             builder.column().name("summary_file_name").type("VARCHAR(255)").nullable(true).unique(false);
+            builder.column().name("transcript_file_name").type("VARCHAR(255)").nullable(true).unique(false);
             builder.column().name("id").type("BIGINT").nullable(false).unique(false).autoIncrement(1);
             builder.column().name("creator_id").type("BIGINT").nullable(false).unique(false);
             builder.column().name("creation_time").type("DATETIME").nullable(true).unique(false).defaultValue("NOW()");

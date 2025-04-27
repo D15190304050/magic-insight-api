@@ -19,4 +19,10 @@ public class RedisKeyManager
     {
         return RedisKeyPrefixes.VIDEO_PLAY_URL + videoId;
     }
+
+    public String getMarkedVideoPlayUrlKey(long videoId)
+    {
+        return RedisKeyPrefixes.MARKED_VIDEO_PLAY_URL + videoId;
+    }
+
 }

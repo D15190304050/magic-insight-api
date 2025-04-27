@@ -13,8 +13,8 @@ import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.autoconfig.minio.EasyMinio;
 import stark.magicinsight.dao.UserVideoInfoMapper;
 import stark.magicinsight.dto.params.VideoSummaryEndMessage;
-import stark.magicinsight.dto.results.TranscriptSummary;
-import stark.magicinsight.service.doubao.DoubaoSummarizer;
+import stark.magicinsight.dto.results.TranscriptAnalysis;
+import stark.magicinsight.service.doubao.TranscriptAnalyzer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,10 +38,9 @@ public class ConsumerService
     private EasyMinio easyMinio;
 
     @Autowired
-    private DoubaoSummarizer doubaoSummarizer;
-
-    @Autowired
     private UserVideoInfoMapper userVideoInfoMapper;
+    @Autowired
+    private TranscriptAnalyzer transcriptAnalyzer;
 
     @KafkaListener(topics = {"${spring.kafka.consumer.topic-summary-video-end}"},
             groupId = "${spring.kafka.consumer.group-id}",
@@ -50,31 +49,12 @@ public class ConsumerService
     public void handleMessage(ConsumerRecord<String, String> record, Acknowledgment ack)
     {
         String message = record.value();
-        log.info("Received data, topic = {}，value = {}", record.topic(), message);
+        log.info("Received data, topic = {}, value = {}", record.topic(), message);
 
         try
         {
             VideoSummaryEndMessage summaryEndMessage = JsonSerializer.deserialize(message, VideoSummaryEndMessage.class);
-            long videoId = summaryEndMessage.getVideoId();
-            String subtitleObjectName = summaryEndMessage.getSubtitleObjectName();
-
-            String transcript = getTranscript(subtitleObjectName);
-            TranscriptSummary summary;
-
-            // We don't generate summary for transcript with length less than SUMMARY_THRESHOLD.
-            if (StringUtils.hasText(transcript) && transcript.length() > SUMMARY_THRESHOLD)
-            {
-//                summary = doubaoSummarizer.summarize(transcript);
-                summary = new TranscriptSummary();
-                log.info("Summary = {}", JsonSerializer.serialize(summary));
-            }
-            else
-            {
-                summary = new TranscriptSummary();
-                summary.setCanSummarize(false);
-            }
-
-            saveSummary(videoId, summary);
+            handleMessage(summaryEndMessage);
         }
         catch (Exception e)
         {
@@ -88,6 +68,30 @@ public class ConsumerService
         }
     }
 
+    public TranscriptAnalysis handleMessage(VideoSummaryEndMessage summaryEndMessage) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        long videoId = summaryEndMessage.getVideoId();
+        String subtitleObjectName = summaryEndMessage.getSubtitleObjectName();
+
+        String transcript = getTranscript(subtitleObjectName);
+        TranscriptAnalysis analysis;
+
+        // We don't generate summary for transcript with length less than SUMMARY_THRESHOLD.
+        if (StringUtils.hasText(transcript) && transcript.length() > SUMMARY_THRESHOLD)
+        {
+            analysis = transcriptAnalyzer.analyze(transcript);
+        }
+        else
+        {
+            analysis = new TranscriptAnalysis();
+        }
+        log.info("videoId = "+videoId);
+        saveAnalysis(videoId, analysis, subtitleObjectName);
+
+
+        return analysis;
+    }
+
     private String getTranscript(String subtitleObjectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         InputStream objectInputStream = easyMinio.getObjectInputStream(bucketNameVideoSubtitles, subtitleObjectName);
@@ -95,22 +99,22 @@ public class ConsumerService
         return new String(byteContent, StandardCharsets.UTF_8);
     }
 
-    private void saveSummary(long videoId, TranscriptSummary transcriptSummary) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    private void saveAnalysis(long videoId, TranscriptAnalysis transcriptAnalysis,String transcriptFileName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
-        String summaryFileName = saveSummaryToMinio(videoId, transcriptSummary);
-        saveSummaryFileNameToDb(videoId, summaryFileName);
+        String analysisFileName = saveAnalysisToMinio(videoId, transcriptAnalysis);
+        saveAnalysisFileNameToDb(videoId, analysisFileName,transcriptFileName);
     }
 
-    private String saveSummaryToMinio(long videoId, TranscriptSummary transcriptSummary) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    private String saveAnalysisToMinio(long videoId, TranscriptAnalysis transcriptAnalysis) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
-        String summaryFileName = DoubaoSummarizer.getSummaryFileName(videoId);
-        easyMinio.putObject(bucketNameSummaries, summaryFileName, transcriptSummary);
-        return summaryFileName;
+        String analysisFileName = TranscriptAnalyzer.getAnalysisFileName(videoId);
+        easyMinio.putObject(bucketNameSummaries, analysisFileName, transcriptAnalysis);
+        return analysisFileName;
     }
 
-    private void saveSummaryFileNameToDb(long videoId, String summaryFileName)
+    private void saveAnalysisFileNameToDb(long videoId, String summaryFileName, String transcriptFileName)
     {
-        userVideoInfoMapper.setVideoSummaryFileNameById(videoId, summaryFileName);
+        userVideoInfoMapper.setVideoSummaryAndTranscriptFileNameById(videoId, summaryFileName,transcriptFileName);
     }
 }
 

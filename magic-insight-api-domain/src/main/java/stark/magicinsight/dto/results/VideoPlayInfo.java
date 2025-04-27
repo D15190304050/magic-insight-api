@@ -26,4 +26,8 @@ public class VideoPlayInfo
     private boolean userFavorites;
     private List<String> labels;
     private String summary;
+
+    private String markedNameInOss;
+    private String markedVideoPlayUrl;
+    private String transcript;
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.magicinsight.dto.params.*;
+import stark.magicinsight.dto.results.TranscriptAnalysis;
 import stark.magicinsight.dto.results.TranscriptSummary;
 import stark.magicinsight.dto.results.VideoPlayInfo;
 import stark.magicinsight.service.ImageService;
@@ -99,5 +100,11 @@ public class VideoController
     public ServiceResponse<TranscriptSummary> getSummaryOfVideo(@RequestParam("videoId") long videoId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         return videoService.getSummaryOfVideo(videoId);
+    }
+
+    @GetMapping("/analysis")
+    public ServiceResponse<TranscriptAnalysis> getAnalysisOfVideo(@RequestParam("videoId") long videoId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        return videoService.getAnalysisOfVideo(videoId);
     }
 }
