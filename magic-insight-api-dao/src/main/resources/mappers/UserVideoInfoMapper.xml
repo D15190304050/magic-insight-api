@@ -153,7 +153,7 @@
         WHERE `id` = #{id}
     </select>
 
-    <update id="setVideoSummaryFileNameById">
+    <update id="setVideoSummaryAndTranscriptFileNameById">
         UPDATE `user_video_info`
         SET `summary_file_name` = #{summaryFileName},`transcript_file_name` = #{transcriptFileName}
         WHERE `id` = #{id}

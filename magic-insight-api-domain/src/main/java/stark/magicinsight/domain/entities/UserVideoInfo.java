@@ -15,10 +15,10 @@ public class UserVideoInfo extends DomainBase
     /**
      * Name of the corresponding object in OSS.
      */
-    @Column(type = "VARCHAR(255)")
+    @Column(type = "VARCHAR(255)", unique = true)
     private String nameInOss;
 
-    @Column(type = "VARCHAR(255)")
+    @Column(type = "VARCHAR(255)", unique = true)
     private String markedNameInOss;
 
     /**
@@ -42,9 +42,9 @@ public class UserVideoInfo extends DomainBase
     /**
      * Path of the summary file of the video.
      */
-    @Column(type = "VARCHAR(255)")
+    @Column(type = "VARCHAR(255)", unique = true)
     private String summaryFileName;
 
-    @Column(type = "VARCHAR(255)")
+    @Column(type = "VARCHAR(255)", unique = true)
     private String transcriptFileName;
 }

@@ -114,7 +114,7 @@ public class ConsumerService
 
     private void saveAnalysisFileNameToDb(long videoId, String summaryFileName, String transcriptFileName)
     {
-        userVideoInfoMapper.setVideoSummaryFileNameById(videoId, summaryFileName,transcriptFileName);
+        userVideoInfoMapper.setVideoSummaryAndTranscriptFileNameById(videoId, summaryFileName,transcriptFileName);
     }
 }
 

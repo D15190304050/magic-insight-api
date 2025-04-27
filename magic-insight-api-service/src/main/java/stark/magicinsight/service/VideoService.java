@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.basic.data.redis.RedisQuickOperation;
@@ -50,6 +51,7 @@ public class VideoService
     public static final String VIDEO_FILE_EXTENSION = "-extension";
     public static final Set<String> VIDEO_FILE_EXTENSION_SET = Set.of(".mp4", ".avi");
     public static final int VIDEO_LIKE = 1;
+
     @Value("${dataworks.easy-minio.bucket-name-video-subtitles}")
     private String bucketNameVideoSubtitles;
 
@@ -289,9 +291,10 @@ public class VideoService
             try
             {
                 easyMinio.deleteObjects(bucketNameVideos, sortedChunkNames);
-            } catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |
-                     NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
-                     InternalException e)
+            }
+            catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |
+                   NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
+                   InternalException e)
             {
                 throw new RuntimeException(e);
             }
@@ -515,13 +518,18 @@ public class VideoService
 
         videoPlayInfo.setPlayCount(videoPlayInfo.getPlayCount() + 1);
 
+        // Get transcript of the video.
+        // In userVideoInfoMapper.
+        // getTranscriptFileNameById().
         UserVideoInfo userVideoInfo = userVideoInfoMapper.getVideoBaseInfoById(videoId);
         String transcriptFileName = userVideoInfo.getTranscriptFileName();
-        if (transcriptFileName == null || transcriptFileName.trim().isEmpty()) {
+        if (!StringUtils.hasText(transcriptFileName))
+        {
             throw new IllegalArgumentException("Transcript file name cannot be null or empty");
         }
         String transcript = getTranscriptByTranscriptName(transcriptFileName);
         videoPlayInfo.setTranscript(transcript);
+
         return ServiceResponse.buildSuccessResponse(videoPlayInfo);
     }
 
